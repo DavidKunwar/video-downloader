@@ -87,7 +87,7 @@ function HomePage() {
                                     {/* URL Input Section */}
 
                                     <div className="m-4">
-                                        <strong>Upload Video</strong>
+                                        <strong>Enter Video Url</strong>
                                         <div className="border mt-2">
                                             <div className="form-group p-3">
                                                 <div className="col-md-12">
