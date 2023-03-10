@@ -44,7 +44,7 @@ function HomePage() {
         setIsLoading(true)
 
         // Generate download url
-        const fbOptions = {
+        const options = {
             method: 'GET',
             url: 'https://facebook-reel-and-video-downloader.p.rapidapi.com/app/main.php',
             params: { url: inputUrl },
@@ -54,7 +54,7 @@ function HomePage() {
             }
         }
 
-        axios.request(fbOptions).then(function (response) {
+        axios.request(options).then(function (response) {
             setMediaDownloadUrl(response.data.links["Download High Quality"])
             setIsDownloadReady(true)
             setIsLoading(false)
@@ -63,11 +63,35 @@ function HomePage() {
         });
     }
 
+    function processYoutubeUrl() {
+        // Youtube logic
+        setIsLoading(true)
+
+        const options = {
+            method: 'POST',
+            url: 'http://localhost:3001/generate-youtube-video-download-url',
+            data: {
+                youtubeVideoUrl: inputUrl,
+            }
+        }
+
+        axios(options).then((response) => {
+            console.log(response.data)
+            setMediaDownloadUrl(response.data.downloadUrl)
+            setIsDownloadReady(true)
+            setIsLoading(false)
+        }).catch((error) => {
+            console.log(error)
+        })
+    }
+
     function handleUrlProccessing() {
         if (inputUrl.includes("instagram")) {
             processInstagramUrl()
         } else if (inputUrl.includes("facebook")) {
             processFacebookUrl()
+        } else if (inputUrl.includes("youtube")) {
+            processYoutubeUrl()
         }
 
     }
