@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import axios from "axios"
 import Spinner from "./spinner"
+import Link from 'next/link'
 
 function HomePage() {
 
@@ -9,6 +10,8 @@ function HomePage() {
     const [isDisabled, setIsDisabled] = useState(true)
     const [isDownloadReady, setIsDownloadReady] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [socialMedia, setSocialMedia] = useState("")
+
 
     function handleInput(event) {
         setInputUrl(event.target.value)
@@ -31,6 +34,7 @@ function HomePage() {
         }
 
         axios.request(options).then(function (response) {
+            console.log(response.data)
             setMediaDownloadUrl(response.data.media)
             setIsDownloadReady(true)
             setIsLoading(false)
@@ -55,6 +59,7 @@ function HomePage() {
         }
 
         axios.request(options).then(function (response) {
+            console.log(response.data)
             setMediaDownloadUrl(response.data.links["Download High Quality"])
             setIsDownloadReady(true)
             setIsLoading(false)
@@ -87,10 +92,13 @@ function HomePage() {
 
     function handleUrlProccessing() {
         if (inputUrl.includes("instagram")) {
+            setSocialMedia("instagram")
             processInstagramUrl()
         } else if (inputUrl.includes("facebook")) {
+            setSocialMedia("facebook")
             processFacebookUrl()
         } else if (inputUrl.includes("youtube")) {
+            setSocialMedia("youtube")
             processYoutubeUrl()
         }
 
@@ -152,12 +160,14 @@ function HomePage() {
 
                                     {
                                         isDownloadReady ?
-                                            <button
-                                                className="btn btn-primary w-100"
-                                                onClick={handleDownload}
-                                            >
-                                                Download Video
-                                            </button>
+                                            socialMedia === "youtube" ?
+                                                <button className="btn btn-primary w-100 p-0">
+                                                    <Link className="btn btn-primary w-100" download={"downloadedFile.mp4"} href={mediaDownloadUrl} >Download Video</Link>
+                                                </button>
+                                                :
+                                                <button className="btn btn-primary w-100" onClick={handleDownload}>
+                                                    Download Video
+                                                </button>
                                             :
                                             <button
                                                 className="btn btn-primary w-100"
