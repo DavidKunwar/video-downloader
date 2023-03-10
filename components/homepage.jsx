@@ -15,31 +15,60 @@ function HomePage() {
         setIsDisabled(false)
     }
 
-    function handleUrlProccessing() {
-
+    function processInstagramUrl() {
+        // Instagram logic
         setIsLoading(true)
+
         // Generate download url
-        // https://www.instagram.com/p/CpUIBAlIV8I/
         const options = {
             method: 'GET',
             url: 'https://instagram-downloader-download-instagram-videos-stories.p.rapidapi.com/index',
-            // params: { url: 'https://www.instagram.com/p/CpU3PpkjGSc/' },
             params: { url: inputUrl },
             headers: {
                 'X-RapidAPI-Key': '97b71515femsh9d1af67bf30806dp18bdefjsn2095b481d04b',
                 'X-RapidAPI-Host': 'instagram-downloader-download-instagram-videos-stories.p.rapidapi.com'
             }
-        };
+        }
 
         axios.request(options).then(function (response) {
-            console.log(response.data)
             setMediaDownloadUrl(response.data.media)
             setIsDownloadReady(true)
             setIsLoading(false)
+        }).catch(function (error) {
+            console.error(error);
+        })
+    }
 
+    function processFacebookUrl() {
+        // Facebook logic
+        setIsLoading(true)
+
+        // Generate download url
+        const fbOptions = {
+            method: 'GET',
+            url: 'https://facebook-reel-and-video-downloader.p.rapidapi.com/app/main.php',
+            params: { url: inputUrl },
+            headers: {
+                'X-RapidAPI-Key': '97b71515femsh9d1af67bf30806dp18bdefjsn2095b481d04b',
+                'X-RapidAPI-Host': 'facebook-reel-and-video-downloader.p.rapidapi.com'
+            }
+        }
+
+        axios.request(fbOptions).then(function (response) {
+            setMediaDownloadUrl(response.data.links["Download High Quality"])
+            setIsDownloadReady(true)
+            setIsLoading(false)
         }).catch(function (error) {
             console.error(error);
         });
+    }
+
+    function handleUrlProccessing() {
+        if (inputUrl.includes("instagram")) {
+            processInstagramUrl()
+        } else if (inputUrl.includes("facebook")) {
+            processFacebookUrl()
+        }
 
     }
 
